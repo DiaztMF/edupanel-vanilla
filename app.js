@@ -133,7 +133,7 @@
       "<header class='dash-header'><div class='brand-left'>" +
       "<div class='brand-item'><img src='DinasPendidikanKotaSurakarta_nobg.webp' alt='Logo Dinas Pendidikan Kota Surakarta' onerror='this.remove()'><span class='t'><span>Dinas Pendidikan</span><span>Kota Surakarta</span></span></div>" +
       "<div class='brand-divider'></div>" +
-      "<div class='brand-item'><img src='smpn14_nobg.webp' alt='Logo SMP Negeri 14 Surakarta' onerror='this.remove()'><span class='t'><span>SMP Negeri 14</span><span>Surakarta</span></span></div>" +
+      "<div class='brand-item'><img src='smkn2-surakarta.png' alt='Logo SMK Negeri 2 Surakarta' onerror='this.remove()'><span class='t'><span>SMK Negeri 2</span><span>Surakarta</span></span></div>" +
       "</div><div class='brand-right'><h1>EduPanel <span>Hub</span></h1><p>Interactive Learning Games · IFP Edition</p></div></header>" +
       "<main class='dash-main'>";
     CATS.forEach(function (c) {
