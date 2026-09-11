@@ -182,9 +182,9 @@
       "<header class='kiosk-nav'>" +
       "<div class='inst-badge-tray'>" +
       "<div class='inst-logo-duo'>" +
-      "<img src='DinasPendidikanKotaSurakarta_nobg.webp' alt='Dinas Pendidikan' onerror='this.remove()'>" +
+      "<img src='DinasPendidikanKotaSurakarta_nobg.webp' alt='Dinas Pendidikan' width='42' height='42' style='height:40px;width:auto;max-height:42px;max-width:55px;object-fit:contain;display:block;' onerror='this.remove()'>" +
       "<div class='inst-divider'></div>" +
-      "<img src='smkn2-surakarta.png' alt='SMKN 2 Surakarta' onerror='this.remove()'>" +
+      "<img src='smkn2-surakarta.png' alt='SMKN 2 Surakarta' width='42' height='42' style='height:40px;width:auto;max-height:42px;max-width:55px;object-fit:contain;display:block;' onerror='this.remove()'>" +
       "</div>" +
       "<div class='inst-text'>" +
       "<span class='inst-title'>SMK Negeri 2 Surakarta</span>" +

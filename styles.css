@@ -103,12 +103,17 @@ body {
   padding: 4px 8px;
   border-radius: 12px;
   border: 1px solid rgba(15, 23, 42, 0.06);
+  flex-shrink: 0;
 }
 
 .inst-logo-duo img {
-  height: clamp(30px, 3.8vh, 42px);
-  width: auto;
+  height: 40px !important;
+  max-height: 42px !important;
+  max-width: 60px !important;
+  width: auto !important;
   object-fit: contain;
+  flex-shrink: 0;
+  display: block;
 }
 
 .inst-divider {
