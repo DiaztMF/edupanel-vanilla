@@ -170,9 +170,10 @@
         "</div>";
 
       var cls = "bezel-card " + (g.impl ? "is-playable" : "is-locked") + (isHero ? " hero-card-featured" : "");
-      return g.impl
+      var inner = g.impl
         ? "<a class='" + cls + "' href='#/games/" + g.slug + "'>" + body + "</a>"
         : "<div class='" + cls + "'>" + body + "</div>";
+      return "<div class='cards-flex-cell'>" + inner + "</div>";
     }
 
     var html = "<div class='grid-bg'></div>" +
@@ -182,9 +183,9 @@
       "<header class='kiosk-nav'>" +
       "<div class='inst-badge-tray'>" +
       "<div class='inst-logo-duo'>" +
-      "<img src='DinasPendidikanKotaSurakarta_nobg.webp' alt='Dinas Pendidikan' width='42' height='42' style='height:40px;width:auto;max-height:42px;max-width:55px;object-fit:contain;display:block;' onerror='this.remove()'>" +
+      "<img src='dinas.png' alt='Dinas Pendidikan' width='42' height='42' style='height:38px;width:auto;max-height:38px;max-width:50px;display:block;' onerror='this.remove()'>" +
       "<div class='inst-divider'></div>" +
-      "<img src='smkn2-surakarta.png' alt='SMKN 2 Surakarta' width='42' height='42' style='height:40px;width:auto;max-height:42px;max-width:55px;object-fit:contain;display:block;' onerror='this.remove()'>" +
+      "<img src='smk2.png' alt='SMKN 2 Surakarta' width='42' height='42' style='height:38px;width:auto;max-height:38px;max-width:50px;display:block;' onerror='this.remove()'>" +
       "</div>" +
       "<div class='inst-text'>" +
       "<span class='inst-title'>SMK Negeri 2 Surakarta</span>" +
@@ -211,6 +212,7 @@
       "<div class='bento-master-row'>" +
 
       /* Left Tray: Arena Duel Kompetitif (Category A) */
+      "<div class='bento-col-left'>" +
       "<section class='tray-shell'>" +
       "<div class='tray-header'>" +
       "<div class='tray-title-group'>" +
@@ -221,12 +223,14 @@
       "</div>" +
       "<span class='tray-count-pill'>" + compGames.length + " Modul</span>" +
       "</div>" +
-      "<div style='flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(8px,1vw,14px);min-height:0'>" +
+      "<div class='cards-flex-wrap'>" +
       compGames.map(function (g) { return renderCard(g, false); }).join("") +
       "</div>" +
       "</section>" +
+      "</div>" +
 
       /* Right Tray: Sorting, Klasifikasi & Eksplorasi */
+      "<div class='bento-col-right'>" +
       "<section class='tray-shell'>" +
       "<div class='tray-header'>" +
       "<div class='tray-title-group'>" +
@@ -237,10 +241,11 @@
       "</div>" +
       "<span class='tray-count-pill'>" + otherGames.length + " Modul</span>" +
       "</div>" +
-      "<div style='flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(8px,1vw,14px);min-height:0;overflow-y:auto;padding-right:2px'>" +
+      "<div class='cards-flex-wrap'>" +
       otherGames.map(function (g) { return renderCard(g, false); }).join("") +
       "</div>" +
       "</section>" +
+      "</div>" +
 
       "</div>" +
       "</main>" +
@@ -288,12 +293,16 @@
 
     function numpadHTML(player, q) {
       var h = player === 1 ? "p1" : "p2";
-      var nums = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (n) { return "<button class='nbtn' data-n='" + n + "'>" + n + "</button>"; }).join("");
+      var nums = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (n) {
+        return "<div class='nbtn-cell'><button class='nbtn' data-n='" + n + "'>" + n + "</button></div>";
+      }).join("");
       return "<div class='play-panel' id='panel" + player + "'><div class='play-head " + h + "'>" + esc(q.problem) + "</div>" +
         "<div class='play-display'><div class='play-input' id='in" + player + "'></div></div>" +
-        "<div class='numpad'>" + nums +
-        "<button class='nbtn clear' data-c='1'>C</button><button class='nbtn' data-n='0'>0</button>" +
-        "<button class='nbtn go' data-g='1'>Go</button></div></div>";
+        "<div class='numpad-flex'>" + nums +
+        "<div class='nbtn-cell'><button class='nbtn clear' data-c='1'>C</button></div>" +
+        "<div class='nbtn-cell'><button class='nbtn' data-n='0'>0</button></div>" +
+        "<div class='nbtn-cell'><button class='nbtn go' data-g='1'>Go</button></div>" +
+        "</div></div>";
     }
     function paint() {
       document.getElementById("p1").innerHTML = numpadHTML(1, p1Q);
