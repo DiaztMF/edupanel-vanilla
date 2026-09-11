@@ -111,17 +111,31 @@
   }
 
   /* ═══ DASHBOARD ═══ */
+  /* ── SVG Monoline Icons for Games (Anti-Slop, No Emoji) ── */
+  var SVG_ICONS = {
+    math: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="1.5"/><circle cx="12" cy="18" r="1.5"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+    quiz: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/><line x1="10" y1="22" x2="14" y2="22"/></svg>',
+    pipette: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 2 4 4"/><path d="M18 6 9 15l-3-1 2-2-5-5 5-5 2 2 1-3 9 9Z"/><path d="m2 22 5-5"/></svg>',
+    pinisi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1 2.4 2.4 0 0 1 2-1 2.4 2.4 0 0 1 2 1 2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1 2.4 2.4 0 0 1 2-1 2.4 2.4 0 0 1 2 1 2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1"/><path d="M4 18 3 14h18l-1 4Z"/><path d="M12 2v12"/><path d="M12 4l7 5h-7"/></svg>',
+    animal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/></svg>',
+    waste: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="m14 16-3 3 3 3"/><path d="M8.293 13.596 5.5 9.5 8.293 5.404"/><path d="m15.5 9.5 3.5-6.5-7.5 1"/></svg>',
+    vocab: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+    space: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>',
+    jungle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>',
+    shapes: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41L13.7 2.71a2.41 2.41 0 0 0-3.41 0z"/></svg>'
+  };
+
   var GAMES = [
-    { slug: "math-tug-of-war", title: "Math Tug-of-War", sub: "Tarik Tambang Matematika", icon: "➗", cat: "A", desc: "Race to solve math problems and pull the rope to your side!", dur: "60s", impl: true },
-    { slug: "quiz-tug-of-war", title: "Quiz Tug-of-War", sub: "Tarik Tambang Kuis", icon: "🧠", cat: "A", desc: "General knowledge trivia battle — who pulls hardest wins!", dur: "60s", impl: true },
-    { slug: "math-pipette-duel", title: "Pipette Duel", sub: "Duel Pipet Matematika", icon: "🧪", cat: "A", desc: "Fill your test tube faster by solving math questions.", dur: "60s", impl: false },
-    { slug: "word-pinisi-duel", title: "Word Pinisi Duel", sub: "Duel Pinisi Kata", icon: "⛵", cat: "A", desc: "Guess words from clues before your Pinisi ship sinks!", dur: "60s", impl: false },
-    { slug: "animal-classification", title: "Animal Classification", sub: "Klasifikasi Hewan", icon: "🐾", cat: "B", desc: "Classify animals into the correct biological categories!", dur: "60s", impl: false },
-    { slug: "waste-sorting-race", title: "Waste Sorting Race", sub: "Balapan Pilah Sampah", icon: "♻️", cat: "B", desc: "Sort falling waste items before the conveyor overflows!", dur: "60s", impl: true },
-    { slug: "english-match", title: "English Match", sub: "Cocokkan Kosakata", icon: "🌐", cat: "B", desc: "Draw lines to match English words with their translations.", dur: "60s", impl: false },
-    { slug: "space-exploration", title: "Space Exploration", sub: "Jelajah Antariksa", icon: "🚀", cat: "C", desc: "Map the solar system — drag moons onto their planets.", dur: "∞", impl: false },
-    { slug: "king-of-jungle", title: "King of the Jungle", sub: "Sang Juara Rimba", icon: "🌿", cat: "C", desc: "Digital board game through Indonesian wilderness terrain.", dur: "Open", impl: false },
-    { slug: "geometric-shapes", title: "Geometric Shapes", sub: "Bangun Ruang Interaktif", icon: "🔷", cat: "C", desc: "Rotate 3D shapes and unfold them into flat nets.", dur: "∞", impl: false }
+    { slug: "math-tug-of-war", title: "Math Tug-of-War", sub: "Tarik Tambang Matematika", iconKey: "math", cat: "A", desc: "Adu cepat berhitung cepat untuk menarik tali ke area tim Anda!", dur: "60s", impl: true },
+    { slug: "quiz-tug-of-war", title: "Quiz Tug-of-War", sub: "Tarik Tambang Kuis", iconKey: "quiz", cat: "A", desc: "Duel wawasan umum & sains — regu dengan tarikan terkuat yang menang.", dur: "60s", impl: true },
+    { slug: "math-pipette-duel", title: "Pipette Duel", sub: "Duel Pipet Matematika", iconKey: "pipette", cat: "A", desc: "Isi tabung reaksi lebih cepat dengan menyelesaikan soal matematika.", dur: "60s", impl: false },
+    { slug: "word-pinisi-duel", title: "Word Pinisi Duel", sub: "Duel Pinisi Kata", iconKey: "pinisi", cat: "A", desc: "Susun kata dari petunjuk sebelum kapal Pinisi Anda karam.", dur: "60s", impl: false },
+    { slug: "animal-classification", title: "Animal Classification", sub: "Klasifikasi Hewan", iconKey: "animal", cat: "B", desc: "Klasifikasikan hewan ke habitat & kategori biologis yang benar.", dur: "60s", impl: false },
+    { slug: "waste-sorting-race", title: "Waste Sorting Race", sub: "Balapan Pilah Sampah", iconKey: "waste", cat: "B", desc: "Pilah kategori sampah Organik, Anorganik & B3 sebelum konveyor penuh!", dur: "60s", impl: true },
+    { slug: "english-match", title: "English Match", sub: "Cocokkan Kosakata", iconKey: "vocab", cat: "B", desc: "Tarik garis penghubung kosakata bahasa Inggris dengan artinya.", dur: "60s", impl: false },
+    { slug: "space-exploration", title: "Space Exploration", sub: "Jelajah Antariksa", iconKey: "space", cat: "C", desc: "Simulasi tata surya interaktif — petakan satelit ke orbit planet.", dur: "∞", impl: false },
+    { slug: "king-of-jungle", title: "King of the Jungle", sub: "Sang Juara Rimba", iconKey: "jungle", cat: "C", desc: "Digital board game petualangan satwa & cagar alam nusantara.", dur: "Open", impl: false },
+    { slug: "geometric-shapes", title: "Geometric Shapes", sub: "Bangun Ruang Interaktif", iconKey: "shapes", cat: "C", desc: "Eksplorasi 3D bangun ruang dan buka jaring-jaring poligon.", dur: "∞", impl: false }
   ];
   var CATS = [
     { id: "A", label: "Kompetitif", icon: "⚔️", color: "#d97706", bg: "#fffbeb" },
@@ -129,36 +143,126 @@
     { id: "C", label: "Eksplorasi", icon: "🔭", color: "#7c3aed", bg: "#f5f3ff" }
   ];
   function renderDashboard() {
+    var heroGame = GAMES[0]; // Math Tug of War as Spotlight
+    var compGames = GAMES.filter(function (g) { return g.cat === "A"; });
+    var otherGames = GAMES.filter(function (g) { return g.cat !== "A"; });
+
+    function renderCard(g, isHero) {
+      var iconSvg = SVG_ICONS[g.iconKey] || SVG_ICONS.math;
+      var catColor = g.cat === "A" ? "#0284c7" : g.cat === "B" ? "#059669" : "#7c3aed";
+      var catBg = g.cat === "A" ? "rgba(14,165,233,0.1)" : g.cat === "B" ? "rgba(5,150,105,0.1)" : "rgba(124,58,237,0.1)";
+
+      var body = "<div class='card-meta-row'>" +
+        "<div class='card-icon-well' style='background:" + catBg + ";border-color:" + catColor + "30;color:" + catColor + "'>" + iconSvg + "</div>" +
+        (g.impl ? "<span class='badge-playable'>● Playable</span>" : "<span class='badge-locked'>Segera Hadir</span>") +
+        "</div>" +
+        "<div><div class='card-title'>" + esc(g.title) + "</div>" +
+        "<div class='card-subtitle' style='color:" + catColor + "'>" + esc(g.sub) + "</div>" +
+        "<p class='card-desc'>" + esc(g.desc) + "</p></div>" +
+        "<div class='card-bottom-pillbox'>" +
+        "<span class='pill-player' style='background:" + catColor + "15;color:" + catColor + "'>👥 2P Mode</span>" +
+        "<span class='pill-duration'>⏱ " + g.dur + "</span>" +
+        "</div>";
+
+      var cls = "bezel-card " + (g.impl ? "is-playable" : "is-locked") + (isHero ? " hero-card-featured" : "");
+      return g.impl
+        ? "<a class='" + cls + "' href='#/games/" + g.slug + "'>" + body + "</a>"
+        : "<div class='" + cls + "'>" + body + "</div>";
+    }
+
     var html = "<div class='grid-bg'></div>" +
-      "<header class='dash-header'><div class='brand-left'>" +
-      "<div class='brand-item'><img src='DinasPendidikanKotaSurakarta_nobg.webp' alt='Logo Dinas Pendidikan Kota Surakarta' onerror='this.remove()'><span class='t'><span>Dinas Pendidikan</span><span>Kota Surakarta</span></span></div>" +
-      "<div class='brand-divider'></div>" +
-      "<div class='brand-item'><img src='smkn2-surakarta.png' alt='Logo SMK Negeri 2 Surakarta' onerror='this.remove()'><span class='t'><span>SMK Negeri 2</span><span>Surakarta</span></span></div>" +
-      "</div><div class='brand-right'><h1>EduPanel <span>Hub</span></h1><p>Interactive Learning Games · IFP Edition</p></div></header>" +
-      "<main class='dash-main'>";
-    CATS.forEach(function (c) {
-      var list = GAMES.filter(function (g) { return g.cat === c.id; });
-      html += "<section class='cat'><div class='cat-label'><span class='cat-bar' style='background:" + c.color + "'></span>" +
-        "<span>" + c.icon + "</span><span class='cat-name' style='color:" + c.color + "'>" + c.label + "</span>" +
-        "<span class='cat-count'>· " + list.length + " game</span>" +
-        "<span class='cat-line' style='background:" + c.color + "30'></span></div>" +
-        "<div class='cat-grid' style='grid-template-columns:repeat(" + list.length + ",1fr)'>";
-      list.forEach(function (g) {
-        var inner = "<span class='gcard-top' style='background:" + c.color + "'></span><span class='gcard-body'>" +
-          "<span class='gcard-row'><span class='gcard-icon' style='background:" + c.bg + ";border:1.5px solid " + c.color + "35'>" + g.icon + "</span>" +
-          "<span style='flex:1;min-width:0'><span class='gcard-title'>" + esc(g.title) + "</span><br><span class='gcard-sub' style='color:" + c.color + "'>" + esc(g.sub) + "</span></span></span>" +
-          "<span class='gcard-desc'>" + esc(g.desc) + "</span>" +
-          "<span class='gcard-foot'><span class='pill' style='background:" + c.color + "15;color:" + c.color + "'>👥 " + 2 + "P</span>" +
-          "<span class='dur'>⏱ " + g.dur + "</span></span>" +
-          (g.impl ? "" : "<span class='pill' style='margin-top:6px;background:#f3f4f6;color:#9ca3af'>Segera hadir di versi vanilla</span>") + "</span>";
-        html += g.impl
-          ? "<a class='gcard' style='border-color:" + c.color + "40' href='#/games/" + g.slug + "'>" + inner + "</a>"
-          : "<div class='gcard' style='border-color:" + c.color + "40;opacity:.65;cursor:default'>" + inner + "</div>";
-      });
-      html += "</div></section>";
-    });
-    html += "</main><p style='position:relative;z-index:10;text-align:center;color:#94a3b8;font-size:11px;padding:2px 0 6px'>Vanilla port · Next.js source di D:\\Project\\Web Project\\Enuma\\EduPanel · 3 dari 10 game playable</p>";
+
+      /* ── 1. HEADER: Floating Glass Island ── */
+      "<div class='kiosk-nav-wrapper'>" +
+      "<header class='kiosk-nav'>" +
+      "<div class='inst-badge-tray'>" +
+      "<div class='inst-logo-duo'>" +
+      "<img src='DinasPendidikanKotaSurakarta_nobg.webp' alt='Dinas Pendidikan' onerror='this.remove()'>" +
+      "<div class='inst-divider'></div>" +
+      "<img src='smkn2-surakarta.png' alt='SMKN 2 Surakarta' onerror='this.remove()'>" +
+      "</div>" +
+      "<div class='inst-text'>" +
+      "<span class='inst-title'>SMK Negeri 2 Surakarta</span>" +
+      "<span class='inst-subtitle'>Dinas Pendidikan Kota Surakarta</span>" +
+      "</div>" +
+      "</div>" +
+
+      "<div class='kiosk-center-brand'>" +
+      "<h1 class='hub-title'>EduPanel <span>Hub</span></h1>" +
+      "<span class='hub-pill-status'><span class='status-dot'></span>Kiosk IFP Siap</span>" +
+      "</div>" +
+
+      "<div class='kiosk-quick-actions'>" +
+      "<button class='kiosk-btn' id='dash-fs-btn' aria-label='Toggle Fullscreen'>" +
+      "<svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3'/></svg>" +
+      "<span>Layar Penuh</span>" +
+      "</button>" +
+      "</div>" +
+      "</header>" +
+      "</div>" +
+
+      /* ── 2. CONTENT: Bento Double-Bezel Architecture ── */
+      "<main class='kiosk-content-area'>" +
+      "<div class='bento-master-row'>" +
+
+      /* Left Tray: Arena Duel Kompetitif (Category A) */
+      "<section class='tray-shell'>" +
+      "<div class='tray-header'>" +
+      "<div class='tray-title-group'>" +
+      "<div class='tray-icon-box' style='background:rgba(2,132,199,0.12);color:#0284c7'>" +
+      "<svg width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'><path d='M14.5 17.5 3 6V3h3l11.5 11.5'/><path d='m13 19 6-6'/><path d='m16 22 5-5'/><path d='m19 5 2 2'/></svg>" +
+      "</div>" +
+      "<h2 class='tray-title'>Arena Duel Kompetitif</h2>" +
+      "</div>" +
+      "<span class='tray-count-pill'>" + compGames.length + " Modul</span>" +
+      "</div>" +
+      "<div style='flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(8px,1vw,14px);min-height:0'>" +
+      compGames.map(function (g) { return renderCard(g, false); }).join("") +
+      "</div>" +
+      "</section>" +
+
+      /* Right Tray: Sorting, Klasifikasi & Eksplorasi */
+      "<section class='tray-shell'>" +
+      "<div class='tray-header'>" +
+      "<div class='tray-title-group'>" +
+      "<div class='tray-icon-box' style='background:rgba(5,150,105,0.12);color:#059669'>" +
+      "<svg width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'><rect width='7' height='7' x='3' y='3' rx='1'/><rect width='7' height='7' x='14' y='3' rx='1'/><rect width='7' height='7' x='14' y='14' rx='1'/><rect width='7' height='7' x='3' y='14' rx='1'/></svg>" +
+      "</div>" +
+      "<h2 class='tray-title'>Klasifikasi & Eksplorasi</h2>" +
+      "</div>" +
+      "<span class='tray-count-pill'>" + otherGames.length + " Modul</span>" +
+      "</div>" +
+      "<div style='flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(8px,1vw,14px);min-height:0;overflow-y:auto;padding-right:2px'>" +
+      otherGames.map(function (g) { return renderCard(g, false); }).join("") +
+      "</div>" +
+      "</section>" +
+
+      "</div>" +
+      "</main>" +
+
+      /* ── 3. FOOTER: Kiosk Dock & Hardware Info ── */
+      "<div class='kiosk-dock-wrapper'>" +
+      "<footer class='kiosk-dock'>" +
+      "<div class='dock-col'>" +
+      "<span class='dock-tag'>IFP Touch Engine</span>" +
+      "<span class='dock-label'>Optimal untuk Layar Sentuh Interaktif 16:9 / 4K</span>" +
+      "</div>" +
+      "<div class='dock-col'>" +
+      "<span class='dock-credit'>Lab Interaktif <strong>SMK Negeri 2 Surakarta</strong> · Versi Web Standalone</span>" +
+      "</div>" +
+      "</footer>" +
+      "</div>";
+
     app.innerHTML = html;
+
+    var fsBtn = document.getElementById("dash-fs-btn");
+    if (fsBtn) {
+      fsBtn.addEventListener("pointerdown", function (e) {
+        e.stopPropagation();
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen().catch(function () {});
+      });
+    }
   }
 
   /* ═══ MATH TUG ═══ */
