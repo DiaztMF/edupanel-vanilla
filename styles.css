@@ -333,19 +333,45 @@ body {
 }
 
 .card-icon-well {
-  width: clamp(38px, 4.2vw, 50px);
-  height: clamp(38px, 4.2vw, 50px);
-  border-radius: 14px;
+  width: clamp(44px, 4.8vw, 64px);
+  height: clamp(44px, 4.8vw, 64px);
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid;
+  border: 1.5px solid;
   flex-shrink: 0;
 }
 
 .card-icon-well svg {
-  width: clamp(20px, 2.2vw, 26px);
-  height: clamp(20px, 2.2vw, 26px);
+  width: clamp(24px, 2.6vw, 34px);
+  height: clamp(24px, 2.6vw, 34px);
+}
+
+.card-center-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 6px 0;
+}
+
+.btn-card-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: clamp(10px, 0.85vw, 13px);
+  padding: 4px 10px;
+  border-radius: 8px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.15s;
+}
+
+.bezel-card.is-playable:active .btn-card-action {
+  transform: scale(0.92);
 }
 
 .badge-playable {

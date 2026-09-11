@@ -154,14 +154,19 @@
 
       var body = "<div class='card-meta-row'>" +
         "<div class='card-icon-well' style='background:" + catBg + ";border-color:" + catColor + "30;color:" + catColor + "'>" + iconSvg + "</div>" +
-        (g.impl ? "<span class='badge-playable'>● Playable</span>" : "<span class='badge-locked'>Segera Hadir</span>") +
+        (g.impl ? "<span class='badge-playable'>● SIAP MAIN</span>" : "<span class='badge-locked'>Segera Hadir</span>") +
         "</div>" +
-        "<div><div class='card-title'>" + esc(g.title) + "</div>" +
+        "<div class='card-center-text'>" +
+        "<div class='card-title'>" + esc(g.title) + "</div>" +
         "<div class='card-subtitle' style='color:" + catColor + "'>" + esc(g.sub) + "</div>" +
-        "<p class='card-desc'>" + esc(g.desc) + "</p></div>" +
+        "<p class='card-desc'>" + esc(g.desc) + "</p>" +
+        "</div>" +
         "<div class='card-bottom-pillbox'>" +
+        "<div style='display:flex;align-items:center;gap:6px'>" +
         "<span class='pill-player' style='background:" + catColor + "15;color:" + catColor + "'>👥 2P Mode</span>" +
         "<span class='pill-duration'>⏱ " + g.dur + "</span>" +
+        "</div>" +
+        (g.impl ? "<span class='btn-card-action' style='background:" + catColor + "'>Mulai ▶</span>" : "") +
         "</div>";
 
       var cls = "bezel-card " + (g.impl ? "is-playable" : "is-locked") + (isHero ? " hero-card-featured" : "");
