@@ -13,6 +13,19 @@
   }
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 
+  /* ── Force reflow/repaint after innerHTML swap on an already-painted subtree.
+     Old Android WebView (Chromium ~30-37 on Android 5) fails to repaint a flex
+     child updated via innerHTML until a touch event forces the compositor to
+     redraw — content is in the DOM (a tap reveals it) but invisible until then.
+     Toggling display forces a synchronous layout+paint right away. ── */
+  function kick(el) {
+    if (!el) return;
+    var d = el.style.display;
+    el.style.display = "none";
+    void el.offsetHeight;
+    el.style.display = d;
+  }
+
   /* ── Polyfill NodeList.prototype.forEach for older Android WebView ── */
   if (window.NodeList && !NodeList.prototype.forEach) {
     NodeList.prototype.forEach = function (callback, thisArg) {
@@ -353,8 +366,10 @@
         "</div></div>";
     }
     function paint() {
-      document.getElementById("p1").innerHTML = numpadHTML(1, p1Q);
-      document.getElementById("p2").innerHTML = numpadHTML(2, p2Q);
+      var e1 = document.getElementById("p1"), e2 = document.getElementById("p2");
+      e1.innerHTML = numpadHTML(1, p1Q);
+      e2.innerHTML = numpadHTML(2, p2Q);
+      kick(e1); kick(e2);
       bindPad(1); bindPad(2);
       paintRope();
     }
@@ -467,8 +482,10 @@
     }
     function paint() {
       document.getElementById("qq").textContent = cur.question;
-      document.getElementById("p1").innerHTML = panelHTML(1, fb1);
-      document.getElementById("p2").innerHTML = panelHTML(2, fb2);
+      var e1 = document.getElementById("p1"), e2 = document.getElementById("p2");
+      e1.innerHTML = panelHTML(1, fb1);
+      e2.innerHTML = panelHTML(2, fb2);
+      kick(e1); kick(e2);
       bind(1); bind(2);
       var r = document.getElementById("rope");
       if (r) r.style.transform = "translateX(" + (-(rope / 50) * 150) + "px)";
@@ -537,8 +554,10 @@
     function paint() {
       document.getElementById("wemoji").textContent = cur.emoji;
       document.getElementById("wname").textContent = cur.name;
-      document.getElementById("t1").innerHTML = teamHTML(1);
-      document.getElementById("t2").innerHTML = teamHTML(2);
+      var e1 = document.getElementById("t1"), e2 = document.getElementById("t2");
+      e1.innerHTML = teamHTML(1);
+      e2.innerHTML = teamHTML(2);
+      kick(e1); kick(e2);
       bind(1); bind(2);
     }
     function bind(p) {
