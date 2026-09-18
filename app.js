@@ -28,10 +28,12 @@
     if (!elem) return;
     var triggered = false;
     elem.addEventListener("touchstart", function (e) {
+      if (elem.disabled) return;
       triggered = true;
       fn.call(this, e);
     }, false);
     elem.addEventListener("click", function (e) {
+      if (elem.disabled) return;
       if (triggered) {
         triggered = false;
         return;
@@ -42,20 +44,26 @@
 
   /* ── Helper: Fullscreen with fallback for older WebKit ── */
   function triggerFullscreen() {
-    var doc = document.documentElement;
-    var isFs = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
-    if (isFs) {
-      if (document.exitFullscreen) document.exitFullscreen();
-      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
-      else if (document.msExitFullscreen) document.msExitFullscreen();
-    } else {
-      if (doc.requestFullscreen) doc.requestFullscreen().catch(function () {});
-      else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
-      else if (doc.mozRequestFullScreen) doc.mozRequestFullScreen();
-      else if (doc.msRequestFullscreen) doc.msRequestFullscreen();
-    }
+    try {
+      var doc = document.documentElement;
+      var isFs = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+      if (isFs) {
+        if (document.exitFullscreen) document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+        else if (document.msExitFullscreen) document.msExitFullscreen();
+      } else {
+        if (doc.requestFullscreen) {
+          var p = doc.requestFullscreen();
+          if (p && p.catch) p.catch(function () {});
+        }
+        else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
+        else if (doc.mozRequestFullScreen) doc.mozRequestFullScreen();
+        else if (doc.msRequestFullscreen) doc.msRequestFullscreen();
+      }
+    } catch (err) { /* fullscreen tidak didukung, abaikan */ }
   }
+  var PIXEL = '<svg width="100%" height="100%" viewBox="0 0 80 90" style="display:block;__FLIP__">' +
     '<rect x="20" y="10" width="40" height="8" fill="#1a1a1a"/><rect x="16" y="18" width="6" height="15" fill="#1a1a1a"/>' +
     '<rect x="18" y="16" width="44" height="4" fill="#e11d48"/><rect x="18" y="20" width="44" height="4" fill="#ffffff"/>' +
     '<rect x="22" y="24" width="36" height="24" fill="#f5c29a"/>' +
@@ -81,7 +89,7 @@
         '<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="none" stroke="rgba(15,23,42,.12)" stroke-width="3"/>' +
         '<circle id="tring" cx="20" cy="20" r="17" fill="none" stroke="#0284c7" stroke-width="3" stroke-linecap="round" stroke-dasharray="106.8 106.8"/></svg>' +
         '<span class="timer-num" id="tnum">60</span></div><span class="timer-cap">TIME</span></div>' : '') +
-      '<button class="btn-fs" id="fsbtn" aria-label="Fullscreen">🖥️</button></div></header>';
+      '<button class="btn-fs" id="fsbtn" aria-label="Fullscreen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button></div></header>';
   }
   function wireFullscreen() {
     var b = document.getElementById("fsbtn");
@@ -125,13 +133,13 @@
       }
     }
     return "<div class='modal-wrap'>" + conf +
-      "<div class='modal' style='border:2px solid " + wc + "25'>" +
-      "<div class='trophy'>" + (winner === "draw" ? "🤝" : "🏆") + "</div>" +
+      "<div class='modal' style='border:2px solid " + wc + "'>" +
+      "<div class='trophy'>" + (winner === "draw" ? "★" : "🏆") + "</div>" +
       "<div><h2 style='color:" + wc + "'>" + title + "</h2>" + sub + "</div>" +
       "<div class='score-card'><div><div class='n' style='color:#1e3a8a'>" + p1 + "</div><div class='who'>" + esc(l1) + "</div></div>" +
       "<span class='sep'>:</span>" +
       "<div><div class='n' style='color:#7f1d1d'>" + p2 + "</div><div class='who'>" + esc(l2) + "</div></div></div>" +
-      "<div class='modal-actions'><button class='btn-rematch' id='rematch' style='background:linear-gradient(135deg," + wc + "," + wc + "dd)'>↻ Rematch</button>" +
+      "<div class='modal-actions'><button class='btn-rematch' id='rematch' style='background:" + wc + "'>↻ Rematch</button>" +
       "<a class='btn-home' href='#/'>⌂ Menu</a></div></div></div>";
   }
 
@@ -393,10 +401,13 @@
     }
     function flash(p, ok) {
       var el = document.getElementById("panel" + p);
-      el.classList.remove("pop", "shake");
-      void el.offsetWidth;
-      el.classList.add(ok ? "flash-good" : "flash-bad", ok ? "pop" : "shake");
-      setTimeout(function () { el.classList.remove("flash-good", "flash-bad"); }, 600);
+      if (!el || !el.classList) return;
+      try {
+        el.classList.remove("pop", "shake");
+        void el.offsetWidth;
+        el.classList.add(ok ? "flash-good" : "flash-bad", ok ? "pop" : "shake");
+        setTimeout(function () { try { el.classList.remove("flash-good", "flash-bad", "pop", "shake"); } catch (e2) {} }, 600);
+      } catch (e) {}
     }
     function answer(p, val) {
       var q = p === 1 ? p1Q : p2Q;
@@ -415,7 +426,7 @@
       if (phase === "finished") return; phase = "finished";
       if (!w) w = rope > 0 ? "p1" : rope < 0 ? "p2" : "draw";
       document.getElementById("md").innerHTML = modalHTML(w, rope > 0 ? 100 : 0, rope < 0 ? 100 : 0, "Tim Biru", "Tim Merah");
-      document.getElementById("rematch").addEventListener("click", function () { route(true); });
+      onTouch(document.getElementById("rematch"), function () { route(true); });
     }
     paint();
     // countdown
@@ -447,8 +458,8 @@
     function panelHTML(p, fb) {
       var h = p === 1 ? "p1" : "p2";
       var btns = cur.options.map(function (o) {
-        var cls = "obtn", dis = phase !== "playing" || fb ? "disabled" : "";
-        if (fb && fb.sel === o) cls += fb.ok ? " good" : " bad";
+        var cls = "opt-btn", dis = phase !== "playing" || fb ? "disabled" : "";
+        if (fb && fb.sel === o) cls += fb.ok ? " correct" : " wrong";
         else if (fb) cls += " dim";
         return "<button class='" + cls + "' data-o=\"" + esc(o) + "\" " + dis + ">" + esc(o) + "</button>";
       }).join("");
@@ -488,7 +499,7 @@
       if (phase === "finished") return; phase = "finished";
       if (!w) w = rope > 0 ? "p1" : rope < 0 ? "p2" : "draw";
       document.getElementById("md").innerHTML = modalHTML(w, p1, p2, "Tim Biru", "Tim Merah");
-      document.getElementById("rematch").addEventListener("click", function () { route(true); });
+      onTouch(document.getElementById("rematch"), function () { route(true); });
     }
     paint();
     var n = 3, ov = document.getElementById("ov");
@@ -517,8 +528,8 @@
       var head = is1 ? "#1e1b4b" : "#7f1d1d", title = is1 ? "TIM BIRU" : "TIM MERAH";
       var btns = opts.map(function (c) {
         var cfg = D.WASTE_CONFIG[c];
-        return "<button class='wbtn' data-c='" + c + "' " + (phase !== "playing" || lock ? "disabled" : "") + " style='border-color:" + cfg.color + "'>" +
-          "<span class='e'>" + cfg.emoji + "</span><span class='l' style='color:" + cfg.color + "'>" + cfg.label + "</span></button>";
+        return "<button class='bin' data-c='" + c + "' " + (phase !== "playing" || lock ? "disabled" : "") + " style='border-color:" + cfg.color + "'>" +
+          "<span class='bicon'>" + cfg.emoji + "</span><span class='blabel' style='color:" + cfg.color + "'>" + cfg.label + "</span></button>";
       }).join("");
       return "<div class='team-head' style='background:" + head + "'><h2>" + title + "</h2><div class='team-score'>" + sc + " pts</div></div>" +
         "<div class='team-body'>" + (res ? "<div class='float-pts' style='color:" + (res === "correct" ? "#10b981" : "#ef4444") + "'>" + (res === "correct" ? "+10" : "-5") + "</div>" : "") + btns + "</div>";
@@ -554,7 +565,7 @@
       if (phase === "finished") return; phase = "finished";
       winner = s1 > s2 ? "p1" : s2 > s1 ? "p2" : "draw";
       document.getElementById("md").innerHTML = modalHTML(winner, s1, s2, "Tim Biru", "Tim Merah");
-      document.getElementById("rematch").addEventListener("click", function () { route(true); });
+      onTouch(document.getElementById("rematch"), function () { route(true); });
     }
     paint();
     var n = 3, ov = document.getElementById("ov");

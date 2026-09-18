@@ -813,6 +813,14 @@ html, body {
 .opt-btn:active { background: #f8fafc; }
 .opt-btn.correct { background: #dcfce7; border-color: #16a34a; color: #14532d; }
 .opt-btn.wrong { background: #fee2e2; border-color: #dc2626; color: #7f1d1d; }
+.opt-btn.dim { opacity: 0.45; }
+.opt-btn[disabled] { opacity: 0.7; }
+/* Alias lama agar kompatibel */
+.obtn { width: 100%; min-height: 52px; padding: 10px 14px; border-radius: 10px; font-family: inherit; font-size: 15px; font-weight: 800; text-align: left; background: #ffffff; color: #0f172a; border: 2px solid #e2e8f0; margin-bottom: 8px; cursor: pointer; }
+.obtn.correct, .obtn.good { background: #dcfce7; border-color: #16a34a; color: #14532d; }
+.obtn.wrong, .obtn.bad { background: #fee2e2; border-color: #dc2626; color: #7f1d1d; }
+.obtn.dim { opacity: 0.45; }
+.obtn[disabled] { opacity: 0.7; }
 
 /* ── QUIZ CARD CLUE BAR ── */
 .q-bar {
@@ -945,6 +953,17 @@ html, body {
   margin-right: 8px;
 }
 
+.bin .blabel { font-size: 15px; font-weight: 900; }
+.bin[disabled] { opacity: 0.7; }
+/* Alias lama */
+.wbtn { padding: 10px 14px; border-radius: 10px; font-family: inherit; font-weight: 900; font-size: 15px; display: flex; align-items: center; cursor: pointer; border: 2px solid; color: #0f172a; background: #fff; margin-bottom: 6px; }
+.wbtn .e { font-size: 22px; margin-right: 8px; }
+.wbtn .l { font-size: 15px; font-weight: 900; }
+.wbtn[disabled] { opacity: 0.7; }
+
+.team-score { font-weight: 900; font-size: 14px; }
+.float-pts { font-weight: 900; font-size: 18px; text-align: center; margin-bottom: 6px; }
+
 .bin.c-organik { border-color: #16a34a; background: #f0fdf4; color: #14532d; }
 .bin.c-anorganik { border-color: #0284c7; background: #f0f9ff; color: #075985; }
 .bin.c-b3 { border-color: #dc2626; background: #fef2f2; color: #7f1d1d; }
@@ -1028,6 +1047,10 @@ html, body {
   margin-left: 6px;
 }
 
+.score-card .n { font-size: 26px; font-weight: 900; }
+.score-card .who { font-size: 11px; font-weight: 700; color: #64748b; margin-top: 2px; }
+.score-card .sep { font-size: 22px; font-weight: 900; color: #94a3b8; margin: 0 14px; }
+
 .modal-actions {
   display: flex;
   flex-direction: row;
@@ -1051,11 +1074,24 @@ html, body {
   margin-right: 8px;
 }
 
-.btn-back-menu {
+.btn-home, .btn-back-menu {
   background: #f1f5f9;
   color: #334155;
-  border: 1px solid #cbd5e1 !important;
+  border: 1px solid #cbd5e1;
 }
+
+/* Feedback animasi game */
+.flash-good { background: #dcfce7 !important; }
+.flash-bad { background: #fee2e2 !important; }
+.pop { opacity: 1; }
+.shake { opacity: 1; }
+@keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+/* Fullscreen + timer + emoji fallback Android 5 */
+.btn-fs svg { display: block; }
+.clue-emoji { font-family: "Noto Color Emoji", "Segoe UI Emoji", "Apple Color Emoji", sans-serif; }
+.team-head h2 { font-size: 14px; font-weight: 900; }
 
 .confetti {
   position: absolute;

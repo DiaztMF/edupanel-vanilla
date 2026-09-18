@@ -102,19 +102,19 @@
   }
   resetTriviaPool();
 
-  /* ─── WASTE (src/data/waste-items.ts — 22 item) ─── */
+  /* ─── WASTE (22 item, emoji Unicode 6.0-safe untuk Android 5 WebView) ─── */
   var WASTE_ITEMS = [
     { name: "Kulit Pisang", emoji: "🍌", cat: "organik" }, { name: "Daun Kering", emoji: "🍂", cat: "organik" },
     { name: "Sisa Nasi", emoji: "🍚", cat: "organik" }, { name: "Tulang Ayam", emoji: "🍗", cat: "organik" },
-    { name: "Ampas Kopi", emoji: "☕", cat: "organik" }, { name: "Kulit Telur", emoji: "🥚", cat: "organik" },
-    { name: "Sayuran Busuk", emoji: "🥦", cat: "organik" }, { name: "Buah Busuk", emoji: "🍎", cat: "organik" },
-    { name: "Botol Plastik", emoji: "🍾", cat: "anorganik" }, { name: "Kaleng Minuman", emoji: "🥫", cat: "anorganik" },
-    { name: "Koran Bekas", emoji: "📰", cat: "anorganik" }, { name: "Botol Kaca", emoji: "🫙", cat: "anorganik" },
-    { name: "Kardus", emoji: "📦", cat: "anorganik" }, { name: "Tas Kresek", emoji: "🛍️", cat: "anorganik" },
-    { name: "Sendok Plastik", emoji: "🥄", cat: "anorganik" }, { name: "Gelas Styrofoam", emoji: "🥤", cat: "anorganik" },
+    { name: "Ampas Kopi", emoji: "☕", cat: "organik" }, { name: "Kulit Telur", emoji: "⚪", cat: "organik" },
+    { name: "Sayuran Busuk", emoji: "🌿", cat: "organik" }, { name: "Buah Busuk", emoji: "🍎", cat: "organik" },
+    { name: "Botol Plastik", emoji: "🍼", cat: "anorganik" }, { name: "Kaleng Minuman", emoji: "🍺", cat: "anorganik" },
+    { name: "Koran Bekas", emoji: "📰", cat: "anorganik" }, { name: "Botol Kaca", emoji: "🍶", cat: "anorganik" },
+    { name: "Kardus", emoji: "📦", cat: "anorganik" }, { name: "Tas Kresek", emoji: "👜", cat: "anorganik" },
+    { name: "Sendok Plastik", emoji: "🍴", cat: "anorganik" }, { name: "Gelas Styrofoam", emoji: "🍵", cat: "anorganik" },
     { name: "Baterai Bekas", emoji: "🔋", cat: "b3" }, { name: "Lampu Neon", emoji: "💡", cat: "b3" },
     { name: "Cat Bekas", emoji: "🎨", cat: "b3" }, { name: "Obat Kedaluwarsa", emoji: "💊", cat: "b3" },
-    { name: "Oli Bekas", emoji: "🛢️", cat: "b3" }, { name: "Sprayer Aerosol", emoji: "💈", cat: "b3" }
+    { name: "Oli Bekas", emoji: "⛽", cat: "b3" }, { name: "Sprayer Aerosol", emoji: "💨", cat: "b3" }
   ];
   var WASTE_CONFIG = {
     organik: { label: "Organik", emoji: "🌱", color: "#059669" },
