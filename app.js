@@ -13,7 +13,49 @@
   }
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 
-  var PIXEL = '<svg width="100%" height="100%" viewBox="0 0 80 90" style="display:block;__FLIP__">' +
+  /* ── Polyfill NodeList.prototype.forEach for older Android WebView ── */
+  if (window.NodeList && !NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = function (callback, thisArg) {
+      thisArg = thisArg || window;
+      for (var i = 0; i < this.length; i++) {
+        callback.call(thisArg, this[i], i, this);
+      }
+    };
+  }
+
+  /* ── Helper: bind unified touch/pointer/click event ── */
+  function onTouch(elem, fn) {
+    if (!elem) return;
+    var triggered = false;
+    elem.addEventListener("touchstart", function (e) {
+      triggered = true;
+      fn.call(this, e);
+    }, false);
+    elem.addEventListener("click", function (e) {
+      if (triggered) {
+        triggered = false;
+        return;
+      }
+      fn.call(this, e);
+    }, false);
+  }
+
+  /* ── Helper: Fullscreen with fallback for older WebKit ── */
+  function triggerFullscreen() {
+    var doc = document.documentElement;
+    var isFs = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    if (isFs) {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+      else if (document.msExitFullscreen) document.msExitFullscreen();
+    } else {
+      if (doc.requestFullscreen) doc.requestFullscreen().catch(function () {});
+      else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
+      else if (doc.mozRequestFullScreen) doc.mozRequestFullScreen();
+      else if (doc.msRequestFullscreen) doc.msRequestFullscreen();
+    }
+  }
     '<rect x="20" y="10" width="40" height="8" fill="#1a1a1a"/><rect x="16" y="18" width="6" height="15" fill="#1a1a1a"/>' +
     '<rect x="18" y="16" width="44" height="4" fill="#e11d48"/><rect x="18" y="20" width="44" height="4" fill="#ffffff"/>' +
     '<rect x="22" y="24" width="36" height="24" fill="#f5c29a"/>' +
@@ -43,10 +85,9 @@
   }
   function wireFullscreen() {
     var b = document.getElementById("fsbtn");
-    if (b) b.addEventListener("pointerdown", function (e) {
-      e.stopPropagation();
-      if (document.fullscreenElement) document.exitFullscreen();
-      else document.documentElement.requestFullscreen().catch(function () {});
+    if (b) onTouch(b, function (e) {
+      if (e.preventDefault) e.preventDefault();
+      triggerFullscreen();
     });
   }
   function startTimer(duration, onDone) {
@@ -113,16 +154,16 @@
   /* ═══ DASHBOARD ═══ */
   /* ── SVG Monoline Icons for Games (Anti-Slop, No Emoji) ── */
   var SVG_ICONS = {
-    math: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="1.5"/><circle cx="12" cy="18" r="1.5"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
-    quiz: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/><line x1="10" y1="22" x2="14" y2="22"/></svg>',
-    pipette: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 2 4 4"/><path d="M18 6 9 15l-3-1 2-2-5-5 5-5 2 2 1-3 9 9Z"/><path d="m2 22 5-5"/></svg>',
-    pinisi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1 2.4 2.4 0 0 1 2-1 2.4 2.4 0 0 1 2 1 2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1 2.4 2.4 0 0 1 2-1 2.4 2.4 0 0 1 2 1 2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1"/><path d="M4 18 3 14h18l-1 4Z"/><path d="M12 2v12"/><path d="M12 4l7 5h-7"/></svg>',
-    animal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/></svg>',
-    waste: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="m14 16-3 3 3 3"/><path d="M8.293 13.596 5.5 9.5 8.293 5.404"/><path d="m15.5 9.5 3.5-6.5-7.5 1"/></svg>',
-    vocab: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
-    space: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>',
-    jungle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>',
-    shapes: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41L13.7 2.71a2.41 2.41 0 0 0-3.41 0z"/></svg>'
+    math: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="1.5"/><circle cx="12" cy="18" r="1.5"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+    quiz: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/><line x1="10" y1="22" x2="14" y2="22"/></svg>',
+    pipette: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 2 4 4"/><path d="M18 6 9 15l-3-1 2-2-5-5 5-5 2 2 1-3 9 9Z"/><path d="m2 22 5-5"/></svg>',
+    pinisi: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1 2.4 2.4 0 0 1 2-1 2.4 2.4 0 0 1 2 1 2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1 2.4 2.4 0 0 1 2-1 2.4 2.4 0 0 1 2 1 2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1"/><path d="M4 18 3 14h18l-1 4Z"/><path d="M12 2v12"/><path d="M12 4l7 5h-7"/></svg>',
+    animal: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/></svg>',
+    waste: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="m14 16-3 3 3 3"/><path d="M8.293 13.596 5.5 9.5 8.293 5.404"/><path d="m15.5 9.5 3.5-6.5-7.5 1"/></svg>',
+    vocab: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+    space: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>',
+    jungle: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>',
+    shapes: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41L13.7 2.71a2.41 2.41 0 0 0-3.41 0z"/></svg>'
   };
 
   var GAMES = [
@@ -267,10 +308,9 @@
 
     var fsBtn = document.getElementById("dash-fs-btn");
     if (fsBtn) {
-      fsBtn.addEventListener("pointerdown", function (e) {
-        e.stopPropagation();
-        if (document.fullscreenElement) document.exitFullscreen();
-        else document.documentElement.requestFullscreen().catch(function () {});
+      onTouch(fsBtn, function (e) {
+        if (e.preventDefault) e.preventDefault();
+        triggerFullscreen();
       });
     }
   }
@@ -317,15 +357,39 @@
     var input = { 1: "", 2: "" };
     function bindPad(p) {
       var root = document.getElementById(p === 1 ? "p1" : "p2");
-      root.querySelectorAll("[data-n]").forEach(function (b) {
-        b.addEventListener("pointerdown", function (e) { e.stopPropagation(); if (input[p].length < 4) { input[p] += b.getAttribute("data-n"); document.getElementById("in" + p).textContent = input[p]; } });
-      });
-      root.querySelector("[data-c]").addEventListener("pointerdown", function (e) { e.stopPropagation(); input[p] = ""; document.getElementById("in" + p).textContent = ""; });
-      root.querySelector("[data-g]").addEventListener("pointerdown", function (e) {
-        e.stopPropagation();
-        if (!input[p] || phase !== "playing") return;
-        answer(p, parseInt(input[p], 10)); input[p] = ""; document.getElementById("in" + p).textContent = "";
-      });
+      var numBtns = root.querySelectorAll("[data-n]");
+      for (var i = 0; i < numBtns.length; i++) {
+        (function (b) {
+          onTouch(b, function (e) {
+            if (e.preventDefault) e.preventDefault();
+            if (input[p].length < 4) {
+              input[p] += b.getAttribute("data-n");
+              var inpEl = document.getElementById("in" + p);
+              if (inpEl) inpEl.textContent = input[p];
+            }
+          });
+        })(numBtns[i]);
+      }
+      var clearBtn = root.querySelector("[data-c]");
+      if (clearBtn) {
+        onTouch(clearBtn, function (e) {
+          if (e.preventDefault) e.preventDefault();
+          input[p] = "";
+          var inpEl = document.getElementById("in" + p);
+          if (inpEl) inpEl.textContent = "";
+        });
+      }
+      var goBtn = root.querySelector("[data-g]");
+      if (goBtn) {
+        onTouch(goBtn, function (e) {
+          if (e.preventDefault) e.preventDefault();
+          if (!input[p] || phase !== "playing") return;
+          answer(p, parseInt(input[p], 10));
+          input[p] = "";
+          var inpEl = document.getElementById("in" + p);
+          if (inpEl) inpEl.textContent = "";
+        });
+      }
     }
     function flash(p, ok) {
       var el = document.getElementById("panel" + p);
@@ -399,9 +463,15 @@
       if (r) r.style.transform = "translateX(" + (-(rope / 50) * 150) + "px)";
     }
     function bind(p) {
-      document.getElementById(p === 1 ? "p1" : "p2").querySelectorAll("[data-o]").forEach(function (b) {
-        b.addEventListener("pointerdown", function (e) { e.stopPropagation(); pick(p, b.getAttribute("data-o")); });
-      });
+      var btns = document.getElementById(p === 1 ? "p1" : "p2").querySelectorAll("[data-o]");
+      for (var i = 0; i < btns.length; i++) {
+        (function (b) {
+          onTouch(b, function (e) {
+            if (e.preventDefault) e.preventDefault();
+            pick(p, b.getAttribute("data-o"));
+          });
+        })(btns[i]);
+      }
     }
     function pick(p, val) {
       if (phase !== "playing" || lock) return;
@@ -461,9 +531,15 @@
       bind(1); bind(2);
     }
     function bind(p) {
-      document.getElementById(p === 1 ? "t1" : "t2").querySelectorAll("[data-c]").forEach(function (b) {
-        b.addEventListener("pointerdown", function (e) { e.stopPropagation(); guess(p, b.getAttribute("data-c")); });
-      });
+      var btns = document.getElementById(p === 1 ? "t1" : "t2").querySelectorAll("[data-c]");
+      for (var i = 0; i < btns.length; i++) {
+        (function (b) {
+          onTouch(b, function (e) {
+            if (e.preventDefault) e.preventDefault();
+            guess(p, b.getAttribute("data-c"));
+          });
+        })(btns[i]);
+      }
     }
     function guess(p, cat) {
       if (phase !== "playing" || lock) return;

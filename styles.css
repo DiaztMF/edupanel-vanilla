@@ -359,6 +359,12 @@ html, body {
   flex-shrink: 0;
 }
 
+.card-icon-well svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
 .badge-playable {
   font-size: 10px;
   font-weight: 800;
