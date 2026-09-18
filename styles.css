@@ -627,6 +627,7 @@ html, body {
   width: 320px;
   flex-shrink: 0;
   align-self: stretch;
+  min-height: 380px;
   display: flex;
   flex-direction: column;
 }
@@ -710,15 +711,14 @@ html, body {
 
 /* ── NUMPAD & MATH INPUT (TABLE / FLEX) ── */
 .play-panel {
-  flex: 1;
-  min-height: 360px;
+  flex: 1 1 auto;
+  min-height: 380px;
   background: #ffffff;
   border-radius: 16px;
   border: 1px solid rgba(15, 23, 42, 0.12);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .play-head {
@@ -728,6 +728,8 @@ html, body {
   font-weight: 900;
   font-size: 26px;
   letter-spacing: -0.01em;
+  border-radius: 14px 14px 0 0;
+  flex-shrink: 0;
 }
 
 .play-head.p1 { background: #1e3a8a; }
@@ -735,6 +737,7 @@ html, body {
 
 .play-display {
   padding: 10px 14px 0 14px;
+  flex-shrink: 0;
 }
 
 .play-input {
@@ -894,13 +897,13 @@ html, body {
 }
 
 .team {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 300px;
   display: flex;
   flex-direction: column;
   background: #ffffff;
   border-radius: 16px;
   border: 2px solid;
-  overflow: hidden;
 }
 
 .team.t1 {
@@ -921,6 +924,8 @@ html, body {
   justify-content: space-between;
   font-weight: 900;
   font-size: 14px;
+  border-radius: 13px 13px 0 0;
+  flex-shrink: 0;
 }
 
 .team.t1 .team-head { background: #1e3a8a; }
