@@ -1,5 +1,18 @@
 /* EduPanel Vanilla — SPA hash-router. Port of Dashboard + 3 games (Next.js source).
    Routes: #/  #/games/math-tug-of-war  #/games/quiz-tug-of-war  #/games/waste-sorting-race */
+/* ── On-screen error banner: old Android WebView often swallows JS errors
+   silently with no visible devtools, so a script crash can look identical
+   to a CSS/paint bug (blank panel, nothing rendered). Surface it on-device. ── */
+window.onerror = function (msg, src, line, col) {
+  try {
+    var box = document.createElement("div");
+    box.setAttribute("style", "position:fixed;top:0;left:0;right:0;z-index:99999;background:#b91c1c;color:#fff;font:12px monospace;padding:8px;white-space:pre-wrap;");
+    box.textContent = "JS ERROR: " + msg + "\n@ " + src + ":" + line + ":" + col;
+    document.body.appendChild(box);
+  } catch (e) {}
+  return false;
+};
+
 (function () {
   "use strict";
   var D = window.EduData;
